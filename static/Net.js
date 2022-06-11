@@ -23,7 +23,7 @@ document.getElementById("loginBtn").onclick = function () {
                         document.getElementById("userLogin").style.display = "none";
                         document.getElementById("bg").style.display = "none";
                         playerBlackLoggedIn = true
-                        playerWhiteLoggedIn = true
+                        //playerWhiteLoggedIn = false
                     }
                     if (data.color == "no color") {
                         document.getElementById("statusBar").innerHTML = ""

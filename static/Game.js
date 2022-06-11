@@ -37,7 +37,15 @@ export default class Game {
         this.scene.add(Plansza.board)
 
         const geometryCylindra = new THREE.CylinderGeometry(4.5, 4.5, 5, 16)
-        const materialNiebieski = new THREE.MeshPhongMaterial({
+        const materialBialy = new THREE.MeshPhongMaterial({
+            color: 0xDCDCDC,
+            side: THREE.DoubleSide,
+            wireframe: false,
+            transparent: true,
+            opacity: 1,
+            shininess: 50
+        });
+        const materialCzerwony = new THREE.MeshPhongMaterial({
             color: 0xff0000,
             side: THREE.DoubleSide,
             wireframe: false,
@@ -48,7 +56,7 @@ export default class Game {
 
         //krążek
         /*for (let i = 0; i < 6; i++) {
-            const krazek = new THREE.Mesh(geometryCylindra, materialNiebieski);
+            const krazek = new THREE.Mesh(geometryCylindra, materialCzerwony);
             krazek.position.set(-10, (i * 9) - 30, 0)
             krazek.rotation.x = 0.5 * Math.PI;
             this.scene.add(krazek)
@@ -96,46 +104,47 @@ export default class Game {
             mouseVector.y = -(event.clientY / window.innerHeight) * 2 + 1;
             raycaster.setFromCamera(mouseVector, this.camera);
             const intersects = raycaster.intersectObjects(this.scene.children);
-            if (intersects.length > 0 && intersects[0].object.material.color.getHex() == 0xFF8C00) {
-                intersects[0].object.material.color.setHex(0xFFFF00)
-                setTimeout(() => { intersects[0].object.material.color.setHex(0xFF8C00); }, 100);
+            if (playerWhiteLoggedIn) {
+                if (intersects.length > 0 && intersects[0].object.material.color.getHex() == 0xFF8C00) {
+                    intersects[0].object.material.color.setHex(0xFFFF00)
+                    setTimeout(() => { intersects[0].object.material.color.setHex(0xFF8C00); }, 100);
 
+                    for (let i = 0; i < 7; i++) {
+                        if (this.tablicaKwadratow[i].material.color.getHex() == 0xFFFF00) {
+                            //console.log(i)
+                            const krazek = new THREE.Mesh(geometryCylindra, materialBialy);
+                            krazek.position.set((i * 10) - 30, 100, 0)
+                            krazek.rotation.x = 0.5 * Math.PI;
+                            this.scene.add(krazek)
 
-                for (let i = 0; i < 7; i++) {
-                    if (this.tablicaKwadratow[i].material.color.getHex() == 0xFFFF00) {
-                        //console.log(i)
-                        const krazek = new THREE.Mesh(geometryCylindra, materialNiebieski);
-                        krazek.position.set((i * 10) - 30, 100, 0)
-                        krazek.rotation.x = 0.5 * Math.PI;
-                        this.scene.add(krazek)
+                            for (let j = 5; j >= 0; j--) {
+                                if (this.pionki[j][i] == 0) {
+                                    this.pionki[j][i] = 1
+                                    //console.log(this.pionki)
 
-                        for (let j = 5; j >= 0; j--) {
-                            if (this.pionki[j][i] == 0) {
-                                this.pionki[j][i] = 1
-                                //console.log(this.pionki)
+                                    let wysokosc
+                                    if (j == 5) {
+                                        wysokosc = -30
+                                    } else if (j == 4) {
+                                        wysokosc = -21
+                                    } else if (j == 3) {
+                                        wysokosc = -12
+                                    } else if (j == 2) {
+                                        wysokosc = -3
+                                    } else if (j == 1) {
+                                        wysokosc = 6
+                                    } else {
+                                        wysokosc = 15
+                                    }
 
-                                let wysokosc
-                                if (j == 5) {
-                                    wysokosc = -30
-                                } else if (j == 4) {
-                                    wysokosc = -21
-                                } else if (j == 3) {
-                                    wysokosc = -12
-                                } else if (j == 2) {
-                                    wysokosc = -3
-                                } else if (j == 1) {
-                                    wysokosc = 6
-                                } else{
-                                    wysokosc = 15
+                                    new TWEEN.Tween(krazek.position) // co
+                                        .to({ x: (i * 10) - 30, y: wysokosc, z: 0 }, 500) // do jakiej pozycji, w jakim czasie
+                                        .easing(TWEEN.Easing.Cubic.Out) // typ easingu (zmiana w czasie)
+                                        .start()
+
+                                    //console.log(wysokosc)
+                                    break
                                 }
-
-                                new TWEEN.Tween(krazek.position) // co
-                                    .to({ x: (i * 10) - 30, y: wysokosc, z: 0 }, 500) // do jakiej pozycji, w jakim czasie
-                                    .easing(TWEEN.Easing.Cubic.Out) // typ easingu (zmiana w czasie)
-                                    .start()
-
-                                //console.log(wysokosc)
-                                break
                             }
                         }
 
@@ -144,13 +153,56 @@ export default class Game {
 
 
 
+
+                    }
+                }
+            } else if (playerBlackLoggedIn) {
+                //console.log("czarny klik")
+                if (intersects.length > 0 && intersects[0].object.material.color.getHex() == 0xFF8C00) {
+                    intersects[0].object.material.color.setHex(0xFFFF00)
+                    setTimeout(() => { intersects[0].object.material.color.setHex(0xFF8C00); }, 100);
+
+                    for (let i = 0; i < 7; i++) {
+                        if (this.tablicaKwadratow[i].material.color.getHex() == 0xFFFF00) {
+                            //console.log(i)
+                            const krazek = new THREE.Mesh(geometryCylindra, materialCzerwony);
+                            krazek.position.set((i * 10) - 30, 100, 0)
+                            krazek.rotation.x = 0.5 * Math.PI;
+                            this.scene.add(krazek)
+
+                            for (let j = 5; j >= 0; j--) {
+                                if (this.pionki[j][i] == 0) {
+                                    this.pionki[j][i] = 1
+                                    //console.log(this.pionki)
+
+                                    let wysokosc
+                                    if (j == 5) {
+                                        wysokosc = -30
+                                    } else if (j == 4) {
+                                        wysokosc = -21
+                                    } else if (j == 3) {
+                                        wysokosc = -12
+                                    } else if (j == 2) {
+                                        wysokosc = -3
+                                    } else if (j == 1) {
+                                        wysokosc = 6
+                                    } else {
+                                        wysokosc = 15
+                                    }
+
+                                    new TWEEN.Tween(krazek.position) // co
+                                        .to({ x: (i * 10) - 30, y: wysokosc, z: 0 }, 500) // do jakiej pozycji, w jakim czasie
+                                        .easing(TWEEN.Easing.Cubic.Out) // typ easingu (zmiana w czasie)
+                                        .start()
+
+                                    //console.log(wysokosc)
+                                    break
+                                }
+                            }
+                        }
                     }
                 }
             }
-
-
-
-
         });
 
 
