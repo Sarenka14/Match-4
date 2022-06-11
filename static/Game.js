@@ -94,10 +94,10 @@ export default class Game {
         this.render() // wywołanie metody render
 
 
-
         //-----------------------reycaster----------------------------
         const raycaster = new THREE.Raycaster(); // obiekt Raycastera symulujący "rzucanie" promieni
         const mouseVector = new THREE.Vector2() // ten wektor czyli pozycja w przestrzeni 2D na ekranie(x,y) wykorzystany będzie do określenie pozycji myszy na ekranie, a potem przeliczenia na pozycje 3D
+
 
         window.addEventListener("mousedown", (e) => {
             mouseVector.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -116,10 +116,16 @@ export default class Game {
                             krazek.position.set((i * 10) - 30, 100, 0)
                             krazek.rotation.x = 0.5 * Math.PI;
                             this.scene.add(krazek)
+                            if (this.pionki[0][i] == 0) {
+                                let przeslanie = i
+                                fetch("/ruch", { method: "post", body: JSON.stringify({ przeslanie }) })
+                            }
+
 
                             for (let j = 5; j >= 0; j--) {
                                 if (this.pionki[j][i] == 0) {
                                     this.pionki[j][i] = 1
+
                                     //console.log(this.pionki)
 
                                     let wysokosc
@@ -169,6 +175,11 @@ export default class Game {
                             krazek.position.set((i * 10) - 30, 100, 0)
                             krazek.rotation.x = 0.5 * Math.PI;
                             this.scene.add(krazek)
+                            if (this.pionki[0][i] == 0) {
+                                let przeslanie = i + 100
+                                fetch("/ruch", { method: "post", body: JSON.stringify({ przeslanie }) })
+                            }
+
 
                             for (let j = 5; j >= 0; j--) {
                                 if (this.pionki[j][i] == 0) {
