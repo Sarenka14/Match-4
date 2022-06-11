@@ -1,9 +1,10 @@
 let playerWhiteLoggedIn = false
 let playerBlackLoggedIn = false
+let renderWhite = false
+let renderBlack = false
 
 document.getElementById("loginBtn").onclick = function () {
     const login = document.getElementById("loginInput").value
-    console.log(login)
     if (login != "") {
         const body = login
 

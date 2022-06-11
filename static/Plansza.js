@@ -23,11 +23,11 @@ export default new class Plansza {
         podstawa.position.y = -35
         this.board.add(podstawa);
 
-        const geomentryKolumny = new THREE.BoxGeometry(1, 60, 5);
+        const geomentryKolumny = new THREE.BoxGeometry(1, 55, 5);
 
         for (let i = 0; i < 8; i++) {
             const kolumna = new THREE.Mesh(geomentryKolumny, materialNiebieski);
-            kolumna.position.set((i * 10) - 35, -5.5, 0)
+            kolumna.position.set((i * 10) - 35, -8, 0)
             this.board.add(kolumna);
         }
 
@@ -38,6 +38,6 @@ export default new class Plansza {
         const sciana2 = new THREE.Mesh(geometrySciany, materialPrzezroczysty)
         sciana2.position.set(0, -5.5, 3)
         //this.board.add(sciana2);
-        
+
     }
 }
