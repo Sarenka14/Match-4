@@ -98,6 +98,98 @@ export default class Game {
         const raycaster = new THREE.Raycaster(); // obiekt Raycastera symulujący "rzucanie" promieni
         const mouseVector = new THREE.Vector2() // ten wektor czyli pozycja w przestrzeni 2D na ekranie(x,y) wykorzystany będzie do określenie pozycji myszy na ekranie, a potem przeliczenia na pozycje 3D
 
+        this.checkMove = () => {
+            if (playerBlackLoggedIn) {
+                fetch("/odeslanieOdBialego", { method: "post" })
+                    .then(response => response.json())
+                    .then(
+                        data => {
+                            if (data.kolumnaBiala != 2137) {
+                                //console.log(data.kolumnaBiala)
+
+                                for (let j = 5; j >= 0; j--) {
+                                    if (this.pionki[j][data.kolumnaBiala] == 0) {
+                                        this.pionki[j][data.kolumnaBiala] = 1
+                                        //console.log(this.pionki)
+                                        const krazek = new THREE.Mesh(geometryCylindra, materialBialy);
+                                        krazek.position.set((data.kolumnaBiala * 10) - 30, 100, 0)
+                                        krazek.rotation.x = 0.5 * Math.PI;
+
+                                        let wysokosc
+                                        if (j == 5) {
+                                            wysokosc = -30
+                                        } else if (j == 4) {
+                                            wysokosc = -21
+                                        } else if (j == 3) {
+                                            wysokosc = -12
+                                        } else if (j == 2) {
+                                            wysokosc = -3
+                                        } else if (j == 1) {
+                                            wysokosc = 6
+                                        } else {
+                                            wysokosc = 15
+                                        }
+
+                                        new TWEEN.Tween(krazek.position) // co
+                                            .to({ x: (data.kolumnaBiala * 10) - 30, y: wysokosc, z: 0 }, 500) // do jakiej pozycji, w jakim czasie
+                                            .easing(TWEEN.Easing.Cubic.Out) // typ easingu (zmiana w czasie)
+                                            .start()
+
+                                        this.scene.add(krazek)
+                                        break
+                                    }
+                                }
+                            }
+
+                        }
+                    )
+            } else if (playerWhiteLoggedIn) {
+                fetch("/odeslanieOdCzarnego", { method: "post" })
+                    .then(response => response.json())
+                    .then(
+                        data => {
+                            if (data.kolumnaCzarna != 2137) {
+                                //console.log(data.kolumnaCzarna)
+
+                                for (let j = 5; j >= 0; j--) {
+                                    if (this.pionki[j][data.kolumnaCzarna] == 0) {
+                                        this.pionki[j][data.kolumnaCzarna] = 1
+                                        //console.log(this.pionki)
+                                        const krazek = new THREE.Mesh(geometryCylindra, materialCzerwony);
+                                        krazek.position.set((data.kolumnaBiala * 10) - 30, 100, 0)
+                                        krazek.rotation.x = 0.5 * Math.PI;
+
+                                        let wysokosc
+                                        if (j == 5) {
+                                            wysokosc = -30
+                                        } else if (j == 4) {
+                                            wysokosc = -21
+                                        } else if (j == 3) {
+                                            wysokosc = -12
+                                        } else if (j == 2) {
+                                            wysokosc = -3
+                                        } else if (j == 1) {
+                                            wysokosc = 6
+                                        } else {
+                                            wysokosc = 15
+                                        }
+
+                                        new TWEEN.Tween(krazek.position) // co
+                                            .to({ x: (data.kolumnaCzarna * 10) - 30, y: wysokosc, z: 0 }, 500) // do jakiej pozycji, w jakim czasie
+                                            .easing(TWEEN.Easing.Cubic.Out) // typ easingu (zmiana w czasie)
+                                            .start()
+
+                                        this.scene.add(krazek)
+                                        break
+                                    }
+                                }
+                            }
+
+                        }
+                    )
+            }
+
+        }
 
         window.addEventListener("mousedown", (e) => {
             mouseVector.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -117,8 +209,7 @@ export default class Game {
                             krazek.rotation.x = 0.5 * Math.PI;
                             this.scene.add(krazek)
                             if (this.pionki[0][i] == 0) {
-                                let przeslanie = i
-                                fetch("/ruch", { method: "post", body: JSON.stringify({ przeslanie }) })
+                                fetch("/ruchBialego", { method: "post", body: JSON.stringify({ i }) })
                             }
 
 
@@ -176,14 +267,13 @@ export default class Game {
                             krazek.rotation.x = 0.5 * Math.PI;
                             this.scene.add(krazek)
                             if (this.pionki[0][i] == 0) {
-                                let przeslanie = i + 100
-                                fetch("/ruch", { method: "post", body: JSON.stringify({ przeslanie }) })
+                                fetch("/ruchCzarnego", { method: "post", body: JSON.stringify({ i }) })
                             }
 
 
                             for (let j = 5; j >= 0; j--) {
                                 if (this.pionki[j][i] == 0) {
-                                    this.pionki[j][i] = 1
+                                    this.pionki[j][i] = 2
                                     //console.log(this.pionki)
 
                                     let wysokosc
@@ -224,6 +314,8 @@ export default class Game {
             this.renderer.setSize(window.innerWidth, window.innerHeight);
         }
         window.addEventListener('resize', this.onWindowResize, false);
+
+        setInterval(this.checkMove, 100);
     }
 
 

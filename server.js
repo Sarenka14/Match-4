@@ -7,7 +7,8 @@ app.use(express.static('static'))
 app.use(express.text())
 
 let players = []
-let kolumna = 2137
+let kolumnaBiala = 2137
+let kolumnaCzarna = 2137
 
 app.listen(PORT, function () {
     console.log("start serwera na porcie " + PORT)
@@ -43,9 +44,26 @@ app.post("/reset", function (req, res) {
     kolumna = 2137
 })
 
-app.post("/ruch", function (req, res) {
+app.post("/ruchBialego", function (req, res) {
     req.body = JSON.parse(req.body)
-    kolumna = req.body.przeslanie
-    console.log(kolumna)
+    kolumnaBiala = req.body.i
+    console.log(kolumnaBiala)
     res.send()
+})
+
+app.post("/ruchCzarnego", function (req, res) {
+    req.body = JSON.parse(req.body)
+    kolumnaCzarna = req.body.i
+    console.log(kolumnaCzarna)
+    res.send()
+})
+
+app.post("/odeslanieOdBialego", function (req, res) {
+    res.send(JSON.stringify({ kolumnaBiala }))
+    kolumnaBiala = 2137
+})
+
+app.post("/odeslanieOdCzarnego", function (req, res) {
+    res.send(JSON.stringify({ kolumnaCzarna }))
+    kolumnaCzarna = 2137
 })
