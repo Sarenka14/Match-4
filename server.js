@@ -10,6 +10,13 @@ let players = []
 let kolumnaBiala = 2137
 let kolumnaCzarna = 2137
 
+const Datastore = require('nedb')
+
+const coll1 = new Datastore({
+    filename: 'kolekcja.db',
+    autoload: true
+});
+
 app.listen(PORT, function () {
     console.log("start serwera na porcie " + PORT)
 })
@@ -47,6 +54,13 @@ app.post("/reset", function (req, res) {
 app.post("/ruchBialego", function (req, res) {
     req.body = JSON.parse(req.body)
     kolumnaBiala = req.body.i
+    /*let obiekt = { kolumna: kolumnaBiala }
+    coll1.insert(obiekt, function (err, newDoc) {
+        newDoc._id = "customId"
+        console.log("dodano dokument (obiekt):")
+        console.log(newDoc)
+        console.log("losowe id dokumentu: " + newDoc._id)
+    });*/
     console.log(kolumnaBiala)
     res.send()
 })
@@ -54,6 +68,13 @@ app.post("/ruchBialego", function (req, res) {
 app.post("/ruchCzarnego", function (req, res) {
     req.body = JSON.parse(req.body)
     kolumnaCzarna = req.body.i
+    /*let obiekt = { kolumna: kolumnaCzarna }
+    coll1.insert(obiekt, function (err, newDoc) {
+        newDoc._id = "customId"
+        console.log("dodano dokument (obiekt):")
+        console.log(newDoc)
+        console.log("losowe id dokumentu: " + newDoc._id)
+    });*/
     console.log(kolumnaCzarna)
     res.send()
 })

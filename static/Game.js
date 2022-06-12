@@ -153,10 +153,10 @@ export default class Game {
 
                                 for (let j = 5; j >= 0; j--) {
                                     if (this.pionki[j][data.kolumnaCzarna] == 0) {
-                                        this.pionki[j][data.kolumnaCzarna] = 1
+                                        this.pionki[j][data.kolumnaCzarna] = 2
                                         //console.log(this.pionki)
                                         const krazek = new THREE.Mesh(geometryCylindra, materialCzerwony);
-                                        krazek.position.set((data.kolumnaBiala * 10) - 30, 100, 0)
+                                        krazek.position.set((data.kolumnaCzarna * 10) - 30, 100, 0)
                                         krazek.rotation.x = 0.5 * Math.PI;
 
                                         let wysokosc
@@ -189,6 +189,65 @@ export default class Game {
                     )
             }
 
+        }
+
+        this.checkEndKolumna = () => {
+            try {
+                for (let i = 0; i < 6; i++) {
+                    for (let j = 0; j < 7; j++) {
+                        if (this.pionki[i][j] == 1 && this.pionki[i + 1][j] == 1 && this.pionki[i + 2][j] == 1 && this.pionki[i + 3][j] == 1) {
+                            console.log("Bialy wygrał w kolumnie")
+                        } else if (this.pionki[i][j] == 2 && this.pionki[i + 1][j] == 2 && this.pionki[i + 2][j] == 2 && this.pionki[i + 3][j] == 2) {
+                            console.log("Czarny wygrał w kolumnie")
+                        }
+                    }
+                }
+            } catch (error) { }
+        }
+
+        this.checkEndRzad = () => {
+            try {
+                for (let i = 0; i < 6; i++) {
+                    for (let j = 0; j < 7; j++) {
+                        if (this.pionki[i][j] == 1 && this.pionki[i][j + 1] == 1 && this.pionki[i][j + 2] == 1 && this.pionki[i][j + 3] == 1) {
+                            console.log("Bialy wygral w rzedzie")
+                        }
+                        if (this.pionki[i][j] == 2 && this.pionki[i][j + 1] == 2 && this.pionki[i][j + 2] == 2 && this.pionki[i][j + 3] == 2) {
+                            console.log("Czarny wygral w rzedzie")
+                        }
+                    }
+                }
+            } catch (error) { }
+        }
+
+        this.checkSkos1 = () => {
+            try {
+                for (let i = 0; i < 6; i++) {
+                    for (let j = 0; j < 7; j++) {
+                        if (this.pionki[i][j] == 1 && this.pionki[i + 1][j + 1] == 1 && this.pionki[i + 2][j + 2] == 1 && this.pionki[i + 3][j + 3] == 1) {
+                            console.log("Bialy wygral na skos 1")
+                        }
+                        if (this.pionki[i][j] == 2 && this.pionki[i + 1][j + 1] == 2 && this.pionki[i + 2][j + 2] == 2 && this.pionki[i + 3][j + 3] == 2) {
+                            console.log("Czarny wygral na skos 1")
+                        }
+                    }
+                }
+            } catch (error) { }
+        }
+
+        this.checkSkos2 = () => {
+            try {
+                for (let i = 0; i < 6; i++) {
+                    for (let j = 0; j < 7; j++) {
+                        if (this.pionki[i + 3][j] == 1 && this.pionki[i + 2][j + 1] == 1 && this.pionki[i + 1][j + 2] == 1 && this.pionki[i][j + 3] == 1) {
+                            console.log("Bialy wygral na skos 2")
+                        }
+                        if (this.pionki[i + 3][j] == 2 && this.pionki[i + 2][j + 1] == 2 && this.pionki[i + 1][j + 2] == 2 && this.pionki[i][j + 3] == 2) {
+                            console.log("Czarny wygral na skos 2")
+                        }
+                    }
+                }
+            } catch (error) { }
         }
 
         window.addEventListener("mousedown", (e) => {
@@ -316,6 +375,10 @@ export default class Game {
         window.addEventListener('resize', this.onWindowResize, false);
 
         setInterval(this.checkMove, 100);
+        setInterval(this.checkEndKolumna, 100);
+        setInterval(this.checkEndRzad, 100);
+        setInterval(this.checkSkos1, 100);
+        setInterval(this.checkSkos2, 100);
     }
 
 
