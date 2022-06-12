@@ -4,6 +4,23 @@ let renderWhite = false
 let renderBlack = false
 let waitForBlack = false
 
+
+
+document.getElementById("wygrani").onclick = function () {
+    fetch("/getWinners", { method: "post" })
+        .then(response => response.json())
+        .then(
+            data => {
+                console.log(data.winners)
+                document.getElementById("statusBar").innerHTML = ''
+                document.getElementById("statusBar").innerHTML += '<h2>wygrani</h2>'
+                data.winners.forEach((winner) => {
+                    document.getElementById("statusBar").innerHTML += `<h3>${winner}<h3>`
+                })
+            }
+        )
+}
+
 document.getElementById("loginBtn").onclick = function () {
     const login = document.getElementById("loginInput").value
     if (login != "") {

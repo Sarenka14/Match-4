@@ -17,6 +17,14 @@ const coll1 = new Datastore({
     autoload: true
 });
 
+app.post("/getWinners", function (req, res) {
+    coll1.find({}, (err, docs) => {
+        docs = docs.map((doc) => { return doc.graczWygrany })
+        console.log(docs)
+        res.end(JSON.stringify({ winners: docs }))
+    })
+})
+
 app.listen(PORT, function () {
     console.log("start serwera na porcie " + PORT)
 })
@@ -48,11 +56,9 @@ app.post("/", function (req, res) {
 
 app.post("/checkLogin", function (req, res) {
     if (players.length == 2) {
-        //2 players in
         const jsonBack = { users: 2 }
         res.end(JSON.stringify(jsonBack))
     } else if (players.length == 1) {
-        //display waiting
         const jsonBack = { users: 1 }
         res.end(JSON.stringify(jsonBack))
     } else {
@@ -63,32 +69,17 @@ app.post("/checkLogin", function (req, res) {
 
 app.post("/reset", function (req, res) {
     players = []
-    kolumna = 2137
 })
 
 app.post("/ruchBialego", function (req, res) {
     req.body = JSON.parse(req.body)
     kolumnaBiala = req.body.i
-    /*let obiekt = { kolumna: kolumnaBiala }
-    coll1.insert(obiekt, function (err, newDoc) {
-        newDoc._id = "customId"
-        console.log("dodano dokument (obiekt):")
-        console.log(newDoc)
-        console.log("losowe id dokumentu: " + newDoc._id)
-    });*/
     res.send()
 })
 
 app.post("/ruchCzarnego", function (req, res) {
     req.body = JSON.parse(req.body)
     kolumnaCzarna = req.body.i
-    /*let obiekt = { kolumna: kolumnaCzarna }
-    coll1.insert(obiekt, function (err, newDoc) {
-        newDoc._id = "customId"
-        console.log("dodano dokument (obiekt):")
-        console.log(newDoc)
-        console.log("losowe id dokumentu: " + newDoc._id)
-    });*/
     res.send()
 })
 
@@ -100,4 +91,22 @@ app.post("/odeslanieOdBialego", function (req, res) {
 app.post("/odeslanieOdCzarnego", function (req, res) {
     res.send(JSON.stringify({ kolumnaCzarna }))
     kolumnaCzarna = 2137
+})
+
+app.post("/wygrywaBialy", function (req, res) {
+    console.log(players[0])
+    const doc = {
+        graczWygrany: players[0]
+    };
+    coll1.insert(doc, function (err, newDoc) { });
+    res.send()
+})
+
+app.post("/wygrywaCzarny", function (req, res) {
+    console.log(players[1])
+    const doc = {
+        graczWygrany: players[1]
+    };
+    coll1.insert(doc, function (err, newDoc) { });
+    res.send()
 })

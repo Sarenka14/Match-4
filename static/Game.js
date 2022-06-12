@@ -73,11 +73,14 @@ export default class Game {
 
         this.kolejBialego = true
         this.kolejCzarnego = false
+        this.endgame = false
 
         document.getElementById("root").append(this.renderer.domElement);
 
         this.camera.position.set(0, 50, 100)
         this.camera.lookAt(this.scene.position)
+
+        this.dodanieDoBazy = false
 
         this.render() // wywołanie metody render
 
@@ -185,8 +188,25 @@ export default class Game {
                     for (let j = 0; j < 7; j++) {
                         if (this.pionki[i][j] == 1 && this.pionki[i + 1][j] == 1 && this.pionki[i + 2][j] == 1 && this.pionki[i + 3][j] == 1) {
                             console.log("Bialy wygrał w kolumnie")
+                            document.getElementById("bialyWygrana").style.display = "block";
+                            document.getElementById("kolejBg").style.display = "none";
+                            if (!this.dodanieDoBazy && playerWhiteLoggedIn) {
+                                console.log("wygrywaBialy")
+                                fetch("/wygrywaBialy", { method: "post" })
+                                this.dodanieDoBazy = true
+                            }
+                            //fetch("/wygrywaBialy", { method: "post" })
+                            this.endgame = true
                         } else if (this.pionki[i][j] == 2 && this.pionki[i + 1][j] == 2 && this.pionki[i + 2][j] == 2 && this.pionki[i + 3][j] == 2) {
                             console.log("Czarny wygrał w kolumnie")
+                            document.getElementById("czarnyWygrana").style.display = "block";
+                            document.getElementById("kolejBg").style.display = "none";
+                            if (!this.dodanieDoBazy && playerBlackLoggedIn) {
+                                fetch("/wygrywaCzarny", { method: "post" })
+                                this.dodanieDoBazy = true
+                            }
+                            //fetch("/wygrywaCzarny", { method: "post" })
+                            this.endgame = true
                         }
                     }
                 }
@@ -199,9 +219,25 @@ export default class Game {
                     for (let j = 0; j < 7; j++) {
                         if (this.pionki[i][j] == 1 && this.pionki[i][j + 1] == 1 && this.pionki[i][j + 2] == 1 && this.pionki[i][j + 3] == 1) {
                             console.log("Bialy wygral w rzedzie")
+                            document.getElementById("bialyWygrana").style.display = "block";
+                            document.getElementById("kolejBg").style.display = "none";
+                            if (!this.dodanieDoBazy && playerWhiteLoggedIn) {
+                                fetch("/wygrywaBialy", { method: "post" })
+                                this.dodanieDoBazy = true
+                            }
+                            //fetch("/wygrywaBialy", { method: "post" })
+                            this.endgame = true
                         }
                         if (this.pionki[i][j] == 2 && this.pionki[i][j + 1] == 2 && this.pionki[i][j + 2] == 2 && this.pionki[i][j + 3] == 2) {
                             console.log("Czarny wygral w rzedzie")
+                            document.getElementById("czarnyWygrana").style.display = "block";
+                            document.getElementById("kolejBg").style.display = "none";
+                            if (!this.dodanieDoBazy && playerBlackLoggedIn) {
+                                fetch("/wygrywaCzarny", { method: "post" })
+                                this.dodanieDoBazy = true
+                            }
+                            //fetch("/wygrywaCzarny", { method: "post" })
+                            this.endgame = true
                         }
                     }
                 }
@@ -214,9 +250,25 @@ export default class Game {
                     for (let j = 0; j < 7; j++) {
                         if (this.pionki[i][j] == 1 && this.pionki[i + 1][j + 1] == 1 && this.pionki[i + 2][j + 2] == 1 && this.pionki[i + 3][j + 3] == 1) {
                             console.log("Bialy wygral na skos 1")
+                            document.getElementById("bialyWygrana").style.display = "block";
+                            document.getElementById("kolejBg").style.display = "none";
+                            if (!this.dodanieDoBazy && playerWhiteLoggedIn) {
+                                fetch("/wygrywaBialy", { method: "post" })
+                                this.dodanieDoBazy = true
+                            }
+                            //fetch("/wygrywaBialy", { method: "post" })
+                            this.endgame = true
                         }
                         if (this.pionki[i][j] == 2 && this.pionki[i + 1][j + 1] == 2 && this.pionki[i + 2][j + 2] == 2 && this.pionki[i + 3][j + 3] == 2) {
                             console.log("Czarny wygral na skos 1")
+                            document.getElementById("czarnyWygrana").style.display = "block";
+                            document.getElementById("kolejBg").style.display = "none";
+                            if (!this.dodanieDoBazy && playerBlackLoggedIn) {
+                                fetch("/wygrywaCzarny", { method: "post" })
+                                this.dodanieDoBazy = true
+                            }
+                            //fetch("/wygrywaCzarny", { method: "post" })
+                            this.endgame = true
                         }
                     }
                 }
@@ -229,9 +281,25 @@ export default class Game {
                     for (let j = 0; j < 7; j++) {
                         if (this.pionki[i + 3][j] == 1 && this.pionki[i + 2][j + 1] == 1 && this.pionki[i + 1][j + 2] == 1 && this.pionki[i][j + 3] == 1) {
                             console.log("Bialy wygral na skos 2")
+                            document.getElementById("bialyWygrana").style.display = "block";
+                            document.getElementById("kolejBg").style.display = "none";
+                            if (!this.dodanieDoBazy && playerWhiteLoggedIn) {
+                                fetch("/wygrywaBialy", { method: "post" })
+                                this.dodanieDoBazy = true
+                            }
+                            //fetch("/wygrywaBialy", { method: "post" })
+                            this.endgame = true
                         }
                         if (this.pionki[i + 3][j] == 2 && this.pionki[i + 2][j + 1] == 2 && this.pionki[i + 1][j + 2] == 2 && this.pionki[i][j + 3] == 2) {
                             console.log("Czarny wygral na skos 2")
+                            document.getElementById("czarnyWygrana").style.display = "block";
+                            document.getElementById("kolejBg").style.display = "none";
+                            if (!this.dodanieDoBazy && playerBlackLoggedIn) {
+                                fetch("/wygrywaCzarny", { method: "post" })
+                                this.dodanieDoBazy = true
+                            }
+                            //fetch("/wygrywaCzarny", { method: "post" })
+                            this.endgame = true
                         }
                     }
                 }
@@ -243,7 +311,7 @@ export default class Game {
             mouseVector.y = -(event.clientY / window.innerHeight) * 2 + 1;
             raycaster.setFromCamera(mouseVector, this.camera);
             const intersects = raycaster.intersectObjects(this.scene.children);
-            if (playerWhiteLoggedIn && waitForBlack && this.kolejBialego) {
+            if (playerWhiteLoggedIn && waitForBlack && this.kolejBialego && !this.endgame) {
                 if (intersects.length > 0 && intersects[0].object.material.color.getHex() == 0xFF8C00) {
                     intersects[0].object.material.color.setHex(0xFFFF00)
                     setTimeout(() => { intersects[0].object.material.color.setHex(0xFF8C00); }, 100);
@@ -289,16 +357,9 @@ export default class Game {
                                 }
                             }
                         }
-
-
-
-
-
-
-
                     }
                 }
-            } else if (playerBlackLoggedIn && this.kolejCzarnego) {
+            } else if (playerBlackLoggedIn && this.kolejCzarnego && !this.endgame) {
                 if (intersects.length > 0 && intersects[0].object.material.color.getHex() == 0xFF8C00) {
                     intersects[0].object.material.color.setHex(0xFFFF00)
                     setTimeout(() => { intersects[0].object.material.color.setHex(0xFF8C00); }, 100);
