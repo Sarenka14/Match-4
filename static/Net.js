@@ -2,6 +2,7 @@ let playerWhiteLoggedIn = false
 let playerBlackLoggedIn = false
 let renderWhite = false
 let renderBlack = false
+let waitForBlack = false
 
 document.getElementById("loginBtn").onclick = function () {
     const login = document.getElementById("loginInput").value
@@ -17,11 +18,30 @@ document.getElementById("loginBtn").onclick = function () {
                         document.getElementById("userLogin").style.display = "none";
                         document.getElementById("bg").style.display = "none";
                         playerWhiteLoggedIn = true
+                        function checkplayers() {
+                            fetch("/checklogin", { method: "post", "": "" }).then(
+                                response => response.json()
+                            ).then(
+                                data => {
+                                    if (data.users == 1) {
+                                        document.getElementById("status").style.display = "block";
+                                        document.getElementById("bg").style.display = "block";
+                                    }
+                                    if (data.users == 2) {
+                                        document.getElementById("status").style.display = "none";
+                                        document.getElementById("bg").style.display = "none";
+                                        waitForBlack = true
+
+                                    }
+                                }
+                            )
+                        } setInterval(checkplayers, 500)
                     }
                     if (data.color == "black") {
                         document.getElementById("statusBar").style.display = "none";
                         document.getElementById("userLogin").style.display = "none";
                         document.getElementById("bg").style.display = "none";
+                        document.getElementById("kolejBg").style.display = "block";
                         playerBlackLoggedIn = true
                         //playerWhiteLoggedIn = false
                     }

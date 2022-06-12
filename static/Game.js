@@ -54,20 +54,6 @@ export default class Game {
             shininess: 50
         });
 
-        //krążek
-        /*for (let i = 0; i < 6; i++) {
-            const krazek = new THREE.Mesh(geometryCylindra, materialCzerwony);
-            krazek.position.set(-10, (i * 9) - 30, 0)
-            krazek.rotation.x = 0.5 * Math.PI;
-            this.scene.add(krazek)
-        }*/
-
-        //kwadraty
-        /*for (let i = 0; i < 7; i++) {
-            const pomaranczowyKwadrat = KlikalnyKwadrat.kwadrat
-            pomaranczowyKwadrat.position.set((i * 10) - 30, 24, 0)
-            this.scene.add(pomaranczowyKwadrat)
-        }*/
         this.tablicaKwadratow = []
         for (let i = 0; i < 7; i++) {
             const geometryPomaranczowegoKwadratu = new THREE.BoxGeometry(9, 9, 5);
@@ -85,6 +71,8 @@ export default class Game {
             this.scene.add(pomaranczowyKwadrat)
         }
 
+        this.kolejBialego = true
+        this.kolejCzarnego = false
 
         document.getElementById("root").append(this.renderer.domElement);
 
@@ -92,7 +80,6 @@ export default class Game {
         this.camera.lookAt(this.scene.position)
 
         this.render() // wywołanie metody render
-
 
         //-----------------------reycaster----------------------------
         const raycaster = new THREE.Raycaster(); // obiekt Raycastera symulujący "rzucanie" promieni
@@ -105,15 +92,14 @@ export default class Game {
                     .then(
                         data => {
                             if (data.kolumnaBiala != 2137) {
-                                //console.log(data.kolumnaBiala)
 
                                 for (let j = 5; j >= 0; j--) {
                                     if (this.pionki[j][data.kolumnaBiala] == 0) {
                                         this.pionki[j][data.kolumnaBiala] = 1
-                                        //console.log(this.pionki)
                                         const krazek = new THREE.Mesh(geometryCylindra, materialBialy);
                                         krazek.position.set((data.kolumnaBiala * 10) - 30, 100, 0)
                                         krazek.rotation.x = 0.5 * Math.PI;
+                                        this.scene.add(krazek)
 
                                         let wysokosc
                                         if (j == 5) {
@@ -135,7 +121,9 @@ export default class Game {
                                             .easing(TWEEN.Easing.Cubic.Out) // typ easingu (zmiana w czasie)
                                             .start()
 
-                                        this.scene.add(krazek)
+
+                                        this.kolejCzarnego = true
+                                        document.getElementById("kolejBg").style.display = "none";
                                         break
                                     }
                                 }
@@ -149,12 +137,9 @@ export default class Game {
                     .then(
                         data => {
                             if (data.kolumnaCzarna != 2137) {
-                                //console.log(data.kolumnaCzarna)
-
                                 for (let j = 5; j >= 0; j--) {
                                     if (this.pionki[j][data.kolumnaCzarna] == 0) {
                                         this.pionki[j][data.kolumnaCzarna] = 2
-                                        //console.log(this.pionki)
                                         const krazek = new THREE.Mesh(geometryCylindra, materialCzerwony);
                                         krazek.position.set((data.kolumnaCzarna * 10) - 30, 100, 0)
                                         krazek.rotation.x = 0.5 * Math.PI;
@@ -178,6 +163,9 @@ export default class Game {
                                             .to({ x: (data.kolumnaCzarna * 10) - 30, y: wysokosc, z: 0 }, 500) // do jakiej pozycji, w jakim czasie
                                             .easing(TWEEN.Easing.Cubic.Out) // typ easingu (zmiana w czasie)
                                             .start()
+
+                                        this.kolejBialego = true
+                                        document.getElementById("kolejBg").style.display = "none";
 
                                         this.scene.add(krazek)
                                         break
@@ -255,14 +243,13 @@ export default class Game {
             mouseVector.y = -(event.clientY / window.innerHeight) * 2 + 1;
             raycaster.setFromCamera(mouseVector, this.camera);
             const intersects = raycaster.intersectObjects(this.scene.children);
-            if (playerWhiteLoggedIn) {
+            if (playerWhiteLoggedIn && waitForBlack && this.kolejBialego) {
                 if (intersects.length > 0 && intersects[0].object.material.color.getHex() == 0xFF8C00) {
                     intersects[0].object.material.color.setHex(0xFFFF00)
                     setTimeout(() => { intersects[0].object.material.color.setHex(0xFF8C00); }, 100);
 
                     for (let i = 0; i < 7; i++) {
                         if (this.tablicaKwadratow[i].material.color.getHex() == 0xFFFF00) {
-                            //console.log(i)
                             const krazek = new THREE.Mesh(geometryCylindra, materialBialy);
                             krazek.position.set((i * 10) - 30, 100, 0)
                             krazek.rotation.x = 0.5 * Math.PI;
@@ -270,13 +257,13 @@ export default class Game {
                             if (this.pionki[0][i] == 0) {
                                 fetch("/ruchBialego", { method: "post", body: JSON.stringify({ i }) })
                             }
+                            this.kolejBialego = false
+                            document.getElementById("kolejBg").style.display = "block";
 
 
                             for (let j = 5; j >= 0; j--) {
                                 if (this.pionki[j][i] == 0) {
                                     this.pionki[j][i] = 1
-
-                                    //console.log(this.pionki)
 
                                     let wysokosc
                                     if (j == 5) {
@@ -298,7 +285,6 @@ export default class Game {
                                         .easing(TWEEN.Easing.Cubic.Out) // typ easingu (zmiana w czasie)
                                         .start()
 
-                                    //console.log(wysokosc)
                                     break
                                 }
                             }
@@ -312,15 +298,13 @@ export default class Game {
 
                     }
                 }
-            } else if (playerBlackLoggedIn) {
-                //console.log("czarny klik")
+            } else if (playerBlackLoggedIn && this.kolejCzarnego) {
                 if (intersects.length > 0 && intersects[0].object.material.color.getHex() == 0xFF8C00) {
                     intersects[0].object.material.color.setHex(0xFFFF00)
                     setTimeout(() => { intersects[0].object.material.color.setHex(0xFF8C00); }, 100);
 
                     for (let i = 0; i < 7; i++) {
                         if (this.tablicaKwadratow[i].material.color.getHex() == 0xFFFF00) {
-                            //console.log(i)
                             const krazek = new THREE.Mesh(geometryCylindra, materialCzerwony);
                             krazek.position.set((i * 10) - 30, 100, 0)
                             krazek.rotation.x = 0.5 * Math.PI;
@@ -328,12 +312,12 @@ export default class Game {
                             if (this.pionki[0][i] == 0) {
                                 fetch("/ruchCzarnego", { method: "post", body: JSON.stringify({ i }) })
                             }
-
+                            this.kolejCzarnego = false
+                            document.getElementById("kolejBg").style.display = "block";
 
                             for (let j = 5; j >= 0; j--) {
                                 if (this.pionki[j][i] == 0) {
                                     this.pionki[j][i] = 2
-                                    //console.log(this.pionki)
 
                                     let wysokosc
                                     if (j == 5) {
@@ -355,7 +339,6 @@ export default class Game {
                                         .easing(TWEEN.Easing.Cubic.Out) // typ easingu (zmiana w czasie)
                                         .start()
 
-                                    //console.log(wysokosc)
                                     break
                                 }
                             }
@@ -375,10 +358,10 @@ export default class Game {
         window.addEventListener('resize', this.onWindowResize, false);
 
         setInterval(this.checkMove, 100);
-        setInterval(this.checkEndKolumna, 100);
-        setInterval(this.checkEndRzad, 100);
-        setInterval(this.checkSkos1, 100);
-        setInterval(this.checkSkos2, 100);
+        setInterval(this.checkEndKolumna, 500);
+        setInterval(this.checkEndRzad, 500);
+        setInterval(this.checkSkos1, 500);
+        setInterval(this.checkSkos2, 500);
     }
 
 
@@ -393,7 +376,6 @@ export default class Game {
             if (!renderWhite) {
                 this.camera.position.set(0, 50, 100)
                 this.light.position.set(50, 70, 50)
-                //console.log("bialy")
                 renderWhite = true
             }
         }
@@ -401,7 +383,6 @@ export default class Game {
             if (!renderBlack) {
                 this.camera.position.set(0, 50, -100)
                 this.light.position.set(50, 70, -50)
-                //console.log("czarny")
                 renderBlack = true
             }
         }

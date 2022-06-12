@@ -46,6 +46,21 @@ app.post("/", function (req, res) {
     }
 })
 
+app.post("/checkLogin", function (req, res) {
+    if (players.length == 2) {
+        //2 players in
+        const jsonBack = { users: 2 }
+        res.end(JSON.stringify(jsonBack))
+    } else if (players.length == 1) {
+        //display waiting
+        const jsonBack = { users: 1 }
+        res.end(JSON.stringify(jsonBack))
+    } else {
+        const jsonBack = { users: 0 }
+        res.end(JSON.stringify(jsonBack))
+    }
+})
+
 app.post("/reset", function (req, res) {
     players = []
     kolumna = 2137
@@ -61,7 +76,6 @@ app.post("/ruchBialego", function (req, res) {
         console.log(newDoc)
         console.log("losowe id dokumentu: " + newDoc._id)
     });*/
-    console.log(kolumnaBiala)
     res.send()
 })
 
@@ -75,7 +89,6 @@ app.post("/ruchCzarnego", function (req, res) {
         console.log(newDoc)
         console.log("losowe id dokumentu: " + newDoc._id)
     });*/
-    console.log(kolumnaCzarna)
     res.send()
 })
 
