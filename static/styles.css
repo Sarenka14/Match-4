@@ -1,83 +1,90 @@
 body {
-    margin: 0 auto;
-    overflow: hidden;
+  margin: 0 auto;
+  overflow: hidden;
 }
 
 .loginForm {
-    z-index: 1000000000000;
-    position: absolute;
-    width: 40%;
-    left: 30%;
-    top: 30%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 5px;
-    color: lightblue;
-    border: 5px lightblue solid;
-    border-radius: 20px;
+  z-index: 1000000000000;
+  position: absolute;
+  width: 40%;
+  left: 30%;
+  top: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 5px;
+  color: lightblue;
+  border: 5px lightblue solid;
+  border-radius: 20px;
 }
 
 .btn {
-    background-color: lightblue;
-    color: black;
-    width: 40%;
-    text-align: center;
-    margin: 5px;
-    border-radius: 20px;
-    font-weight: bold;
+  background-color: lightblue;
+  color: black;
+  width: 40%;
+  text-align: center;
+  margin: 5px;
+  border-radius: 20px;
+  font-weight: bold;
+  transition: background-color 1s;
 }
 
 .loginInput {
-    width: 40%;
-    height: 20px;
-    background-color: rgba(0, 0, 0, 0);
-    border: 2px solid lightblue;
-    border-radius: 20px;
-    color: lightblue;
+  width: 40%;
+  height: 20px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid lightblue;
+  border-radius: 20px;
+  color: lightblue;
 }
 
 .transparentBg {
-    background-color: rgba(0, 0, 0, 0.5);
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 10000000;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10000000;
 }
 
 .statusBar {
-    position: absolute;
-    z-index: 1000000000;
-    width: 100%;
-    border-bottom: 2px solid lightblue;
-    background-color: #8888ff;
-    color: lightblue;
-    font-size: 10px;
+  position: absolute;
+  z-index: 1000000000;
+  width: 100%;
+  border-bottom: 2px solid lightblue;
+  background-color: #8888ff;
+  color: lightblue;
+  font-size: 10px;
 }
 
 .statusH1 {
-    position: absolute;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
-    text-align: center;
-    top: 6%;
-    z-index: 1000000000;
-    width: 100%;
-    color: lightblue;
-    display: none;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  top: 6%;
+  z-index: 1000000000;
+  width: 100%;
+  color: lightblue;
+  display: none;
 }
 
 .kolejBg {
-    display: none;
-    color: lightblue;
-    text-align: center;
-    padding-top: 100px;
-    background-color: rgba(0, 0, 0, 0.5);
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 100000000;
+  display: none;
+  color: lightblue;
+  text-align: center;
+  padding-top: 100px;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 100000000;
+}
+.btn:hover {
+  background-color: #8888ff;
+}
+.btn:active {
+  transform: translateY(4px);
 }
